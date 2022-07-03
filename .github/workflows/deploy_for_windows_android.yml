@@ -15,6 +15,12 @@ jobs:
           channel: 'beta'
       - run: flutter config --enable-windows-desktop
       - run: flutter build windows
+      
+      
+      - uses: actions/upload-artifact@v3
+        with:
+          name: windows
+          path: build\windows\runner\Release # or path/to/artifact
   android: 
     runs-on: ubuntu-latest
     steps:

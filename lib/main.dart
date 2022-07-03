@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
+import 'dart:html' as _html;
 
 Future<void> main() async {
   // Ensure that plugin services are initialized so that `availableCameras()`
@@ -72,24 +73,33 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 
   // return Image object of whatever is returned from the bg.remove api
   uploadImage(XFile image) async {
-      var formData = FormData();
-      var dio = Dio();
-      // flutter add api token
-      // hardcoded free access token
-      dio.options.headers["X-Api-Key"] = "FJHgW6w97C48efycXaUYcHkU";
-      try {
-        if (kIsWeb) {
-            var _bytes = await image.readAsBytes();
-          formData.files.add(MapEntry("image_file", MultipartFile.fromBytes(_bytes, filename: "pic-name.png"), ));
-        } else {
-                formData.files.add(MapEntry("image_file", await MultipartFile.fromFile(image.path, filename: "pic-name.png"), ));
-        }
-        Response<List<int>> response = await dio.post("https://api.remove.bg/v1.0/removebg", data: formData, options: Options(responseType: ResponseType.bytes));
-        return response.data;
-      } catch (e) {
-        return "";
+    var formData = FormData();
+    var dio = Dio();
+    // flutter add api token
+    // hardcoded free access token
+    dio.options.headers["X-Api-Key"] = "FJHgW6w97C48efycXaUYcHkU";
+    try {
+      if (kIsWeb) {
+        var _bytes = await image.readAsBytes();
+        formData.files.add(MapEntry(
+          "image_file",
+          MultipartFile.fromBytes(_bytes, filename: "pic-name.png"),
+        ));
+      } else {
+        formData.files.add(MapEntry(
+          "image_file",
+          await MultipartFile.fromFile(image.path, filename: "pic-name.png"),
+        ));
       }
+      Response<List<int>> response = await dio.post(
+          "https://api.remove.bg/v1.0/removebg",
+          data: formData,
+          options: Options(responseType: ResponseType.bytes));
+      return response.data;
+    } catch (e) {
+      return "";
     }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,11 +138,10 @@ class TakePictureScreenState extends State<TakePictureScreen> {
             await Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => DisplayPictureScreen(
-                  // Pass the automatically generated path to
-                  // the DisplayPictureScreen widget.
-                  imagePath: image.path,
-                  uploadedImage: uploadedImageResp
-                ),
+                    // Pass the automatically generated path to
+                    // the DisplayPictureScreen widget.
+                    imagePath: image.path,
+                    uploadedImage: uploadedImageResp),
               ),
             );
           } catch (e) {
@@ -151,7 +160,8 @@ class DisplayPictureScreen extends StatelessWidget {
   final String imagePath;
   final List<int> uploadedImage;
 
-  const DisplayPictureScreen({super.key, required this.imagePath, required this.uploadedImage});
+  const DisplayPictureScreen(
+      {super.key, required this.imagePath, required this.uploadedImage});
 
   @override
   Widget build(BuildContext context) {
@@ -165,21 +175,42 @@ class DisplayPictureScreen extends StatelessWidget {
     var otherImage = null;
     try {
       otherImage = Image.memory(Uint8List.fromList(uploadedImage));
-    } catch(e) {
-      otherImage= SizedBox.shrink();
+    } catch (e) {
+      otherImage = SizedBox.shrink();
     }
-    return Scaffold(
-      appBar: AppBar(title: const Text('Display the Picture')),
-      // The image is stored as a file on the device. Use the `Image.file`
-      // constructor with the given path to display the image.
-      body: Container(
-         child: Row(
-            children: [
-              image,
-              otherImage
-            ]
-         )
-      )
+    var imageData = otherImage.toString();
+    var downloadButton = null;
+    String base64String = base64Encode(Uint8List.fromList(uploadedImage));
+    String header = "data:image/png;base64";
+    downloadButton = ElevatedButton(
+      onPressed: () => {
+        // saveFile(uploadedImage.toString())
+          {
+            downloadButton = _html.AnchorElement(
+                href:
+                    "$header,$base64String")
+              ..setAttribute("download", "file.png")
+              ..click()
+          }
+      },
+      child: Text("Save File"),
     );
+    downloadButton ??= const SizedBox.shrink();
+    return Scaffold(
+        appBar: AppBar(title: const Text('Display the Picture')),
+        // The image is stored as a file on the device. Use the `Image.file`
+        // constructor with the given path to display the image.
+        body: Container(
+            child: Row(children: [
+          Column(children: [
+            Text("Original Image"),
+            image,
+          ]),
+          Column(children: [
+            Text("Background Removed Image"),
+            otherImage,
+            downloadButton,
+          ]),
+        ])));
   }
 }

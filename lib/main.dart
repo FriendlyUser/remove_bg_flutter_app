@@ -186,11 +186,15 @@ class DisplayPictureScreen extends StatelessWidget {
       onPressed: () => {
         // saveFile(uploadedImage.toString())
           {
-            downloadButton = _html.AnchorElement(
+            if (kIsWeb) {
+              downloadButton = _html.AnchorElement(
                 href:
                     "$header,$base64String")
               ..setAttribute("download", "file.png")
               ..click()
+            } else {
+              // figure out how to download images on mobile
+            }
           }
       },
       child: Text("Save File"),

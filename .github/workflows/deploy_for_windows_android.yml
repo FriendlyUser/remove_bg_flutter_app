@@ -2,7 +2,7 @@ name: Flutter Android/ Windows
 on:
   push:
     branches:
-      - master
+      - main
   
   jobs:
    windows:

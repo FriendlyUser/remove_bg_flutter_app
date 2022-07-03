@@ -6,8 +6,6 @@ import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-// import download_button_web
-import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:rm_img_bg/download_button.dart';
 
 Future<void> main() async {

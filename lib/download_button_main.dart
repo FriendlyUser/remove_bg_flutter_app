@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:rm_img_bg/download_button.dart';
 
+class DownloadButtonProps {
+    List<int> imageInBytes;
+    DownloadButtonProps({ required this.imageInBytes});
+}
 
-class DownloadButtonMain extends StatelessWidget {
+class DownloadButton extends StatelessWidget {
 
   final DownloadButtonProps data;
-  const DownloadButtonMain({Key? key, required this.data}): super(key: key);
+  const DownloadButton({Key? key, required this.data}): super(key: key);
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(

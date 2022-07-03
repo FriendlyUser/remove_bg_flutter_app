@@ -6,7 +6,8 @@ import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:rm_img_bg/download_button.dart';
+import 'package:rm_img_bg/download_button_main.dart'
+if (dart.library.html) 'package:rm_img_bg/download_button_web.dart';
 
 Future<void> main() async {
   // Ensure that plugin services are initialized so that `availableCameras()`

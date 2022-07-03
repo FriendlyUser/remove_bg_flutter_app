@@ -6,8 +6,9 @@ import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'dart:convert';
-import 'dart:html' as _html;
+// import download_button_web
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
+import 'package:rm_img_bg/download_button.dart';
 
 Future<void> main() async {
   // Ensure that plugin services are initialized so that `availableCameras()`
@@ -179,27 +180,7 @@ class DisplayPictureScreen extends StatelessWidget {
       otherImage = SizedBox.shrink();
     }
     var imageData = otherImage.toString();
-    var downloadButton = null;
-    String base64String = base64Encode(Uint8List.fromList(uploadedImage));
-    String header = "data:image/png;base64";
-    downloadButton = ElevatedButton(
-      onPressed: () => {
-        // saveFile(uploadedImage.toString())
-          {
-            if (kIsWeb) {
-              downloadButton = _html.AnchorElement(
-                href:
-                    "$header,$base64String")
-              ..setAttribute("download", "file.png")
-              ..click()
-            } else {
-              // figure out how to download images on mobile
-            }
-          }
-      },
-      child: Text("Save File"),
-    );
-    downloadButton ??= const SizedBox.shrink();
+    var downloadButton = DownloadButton(data: DownloadButtonProps(imageInBytes: uploadedImage));
     return Scaffold(
         appBar: AppBar(title: const Text('Display the Picture')),
         // The image is stored as a file on the device. Use the `Image.file`

@@ -16,3 +16,8 @@ For help getting started with Flutter development, view the
 samples, guidance on mobile development, and a full API reference.
 
 # add dio and then show original image and new image and download option
+
+To run
+```dart
+flutter run -d chrome
+```

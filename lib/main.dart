@@ -183,7 +183,7 @@ class DisplayPictureScreen extends StatelessWidget {
     var otherImage = null;
     try {
       otherImage = Image.memory(Uint8List.fromList(uploadedImage));
-    } catch (e) {
+    } catch (e) { 
       otherImage = SizedBox.shrink();
     }
     var imageData = otherImage.toString();

@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:rm_img_bg/download_button_main.dart'
-if (dart.library.html) 'package:rm_img_bg/download_button_web.dart';
+    if (dart.library.html) 'package:rm_img_bg/download_button_web.dart';
 
 Future<void> main() async {
   // Ensure that plugin services are initialized so that `availableCameras()`
@@ -47,6 +47,8 @@ class TakePictureScreen extends StatefulWidget {
 class TakePictureScreenState extends State<TakePictureScreen> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
+  // error message
+  String errorMessage = '';
 
   @override
   void initState() {
@@ -101,6 +103,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -135,6 +138,11 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 
             final uploadedImageResp = await uploadImage(image);
             // If the picture was taken, display it on a new screen.
+            if (uploadedImageResp.runtimeType == String) {
+              errorMessage = "Failed to upload image";
+              return;
+            }
+            // if response is type string, then its an error and show, set message
             await Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => DisplayPictureScreen(
@@ -179,22 +187,44 @@ class DisplayPictureScreen extends StatelessWidget {
       otherImage = SizedBox.shrink();
     }
     var imageData = otherImage.toString();
-    var downloadButton = DownloadButton(data: DownloadButtonProps(imageInBytes: uploadedImage));
+    var downloadButton =
+        DownloadButton(data: DownloadButtonProps(imageInBytes: uploadedImage));
+    if (kIsWeb) {
+      return Scaffold(
+          appBar: AppBar(title: const Text('Display the Picture')),
+          // The image is stored as a file on the device. Use the `Image.file`
+          // constructor with the given path to display the image.
+          body: Container(
+              child: Row(children: [
+            Column(children: [
+              Text("Original Image"),
+              image,
+            ]),
+            Column(children: [
+              Text("Background Removed Image"),
+              otherImage,
+              downloadButton,
+            ]),
+          ])));
+    }
+
+    // add bigger font and padding on the item.
+    // extra padding on the save file item
     return Scaffold(
         appBar: AppBar(title: const Text('Display the Picture')),
         // The image is stored as a file on the device. Use the `Image.file`
         // constructor with the given path to display the image.
-        body: Container(
-            child: Row(children: [
-          Column(children: [
-            Text("Original Image"),
-            image,
-          ]),
-          Column(children: [
-            Text("Background Removed Image"),
-            otherImage,
-            downloadButton,
-          ]),
+        body: SingleChildScrollView(
+            child: Column(children: [
+              // Original Image with 16 font and padding of 16
+          Text("Original Image", style: const TextStyle(fontSize: 16)),
+          Padding(padding: EdgeInsets.symmetric(4)),
+          image,
+          Text("Background Removed Image", const TextStyle(fontSize: 16)),
+          Padding(padding: EdgeInsets.symmetric(4)),
+          otherImage,
+          Padding(padding: EdgeInsets.symmetric(4)),
+          downloadButton,
         ])));
   }
 }

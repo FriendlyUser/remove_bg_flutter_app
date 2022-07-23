@@ -1,5 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.rm_img_bg">
+    package="com.example.rm_img_bg"
+    >
+        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />    <!-- Permission to write to external storage -->
    <application
         android:label="rm_img_bg"
         android:name="${applicationName}"
@@ -25,6 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data

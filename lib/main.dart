@@ -184,7 +184,7 @@ class DisplayPictureScreen extends StatelessWidget {
     try {
       otherImage = Image.memory(Uint8List.fromList(uploadedImage));
     } catch (e) { 
-      otherImage = SizedBox.shrink();
+      otherImage = const SizedBox.shrink();
     }
     var imageData = otherImage.toString();
     var downloadButton =
@@ -197,11 +197,11 @@ class DisplayPictureScreen extends StatelessWidget {
           body: Container(
               child: Row(children: [
             Column(children: [
-              Text("Original Image"),
+              const Text("Original Image"),
               image,
             ]),
             Column(children: [
-              Text("Background Removed Image"),
+              const Text("Background Removed Image"),
               otherImage,
               downloadButton,
             ]),
@@ -217,13 +217,13 @@ class DisplayPictureScreen extends StatelessWidget {
         body: SingleChildScrollView(
             child: Column(children: [
               // Original Image with 16 font and padding of 16
-          Text("Original Image", style: const TextStyle(fontSize: 16)),
-          Padding(padding: EdgeInsets.symmetric(4)),
+          const Text("Original Image", style: TextStyle(fontSize: 16)),
+          const Padding(padding: EdgeInsets.symmetric(vertical: 4)),
           image,
-          Text("Background Removed Image", const TextStyle(fontSize: 16)),
-          Padding(padding: EdgeInsets.symmetric(4)),
+          const Text("Background Removed Image", style: TextStyle(fontSize: 16)),
+          const Padding(padding: EdgeInsets.symmetric(vertical: 4)),
           otherImage,
-          Padding(padding: EdgeInsets.symmetric(4)),
+          const Padding(padding: EdgeInsets.symmetric(vertical: 4)),
           downloadButton,
         ])));
   }

@@ -16,7 +16,7 @@ jobs:
         with:
           flutter-version: '3.0.3'
       - run: flutter pub get
-      - run: flutter build web --release
+      - run: flutter build web --release -base-href "/remove_bg_flutter_app/"
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:

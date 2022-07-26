@@ -1,0 +1,2 @@
+json_key_file("pc-api-7819418006086265513-297-141698a71862.json") # Path to the json secret file - Follow https://docs.fastlane.tools/actions/supply/#setup to get one
+package_name("com.example.rm_img_bg") # e.g. com.krausefx.app

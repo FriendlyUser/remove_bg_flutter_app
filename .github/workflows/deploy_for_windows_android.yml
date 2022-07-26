@@ -35,7 +35,14 @@ jobs:
         flutter-version: '3.0.3'
     - run: flutter pub get
     - run: flutter build apk
-    - run: flutter build appbundle
+
+    - run: echo $GPLAY_KEY_B64 | base64 --decode > android/pc-api-7819418006086265513-297-141698a71862.json
+      name: decode json file to upload to google play
+    - run: echo $KEY_PROPERTIES_B64 | base64 --decode > android/key.properties
+      name: Decoding Key Properties
+    - run: echo $JKS_FILE_B64 | base64 --decode > android/keystore.jks
+      name: Decode jks file
+    - run: flutter build appbundle --release
 
     - uses: actions/upload-artifact@v3
       with:

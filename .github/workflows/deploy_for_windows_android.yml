@@ -45,4 +45,4 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         name: aab
-        path: build/app/outputs/aab/release/*.aab # or path/to/artifact
+        path: build/app/outputs/bundle/release/*.aab # or path/to/artifact

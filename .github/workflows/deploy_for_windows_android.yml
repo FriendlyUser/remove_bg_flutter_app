@@ -37,12 +37,12 @@ jobs:
 
     # - run: echo $GPLAY_KEY_B64 | base64 --decode > android/pc-api-7819418006086265513-297-141698a71862.json
     #   name: decode json file to upload to google play
-    - run: echo $KEY_PROPERTIES_B64 | base64 --decode > android/key.properties
+    - run: echo $KEY_PROPERTIES_B64 | base64 --decode > android/app/key.properties
       name: Decoding Key Properties
     - run: echo $JKS_FILE_B64 | base64 --decode > android/app/keystore.jks
       name: Decode jks file
-    - run: flutter build apk
     - run: flutter build appbundle --release
+    - run: flutter build apk
 
     - uses: actions/upload-artifact@v3
       with:
